@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <!--
+    If you are serving your web app in a path other than the root, change the
+    href value below to reflect the base path you are serving from.
+
+    The path provided below has to start and end with a slash "/" in order for
+    it to work correctly.
+
+    For more details:
+    * https://developer.mozilla.org/en-US/docs/Web/HTML/Element/base
+
+    This is a placeholder for base href that will be replaced by the value of
+    the `--base-href` argument provided to `flutter build`.
+  -->
+  <base href="$FLUTTER_BASE_HREF">
+
+  <meta charset="UTF-8">
+  <meta content="IE=Edge" http-equiv="X-UA-Compatible">
+  <meta name="description" content="Application premium de l'hôtel Selton.">
+  <meta name="theme-color" content="#1A2850">
+
+  <!-- iOS meta tags & icons -->
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="apple-mobile-web-app-title" content="Selton Hotel">
+  <link rel="apple-touch-icon" href="icons/Icon-192.png">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="favicon.png"/>
+
+  <title>Selton Hotel</title>
+  <link rel="manifest" href="manifest.json">
+</head>
+<body>
+  <div id="pwa-install-banner" style="display:none; position: fixed; left: 16px; right: 16px; bottom: 16px; z-index: 9999; background: rgba(26, 40, 80, 0.96); border: 1px solid rgba(204, 173, 121, 0.55); border-radius: 18px; padding: 14px 14px; box-shadow: 0 14px 40px rgba(0,0,0,0.45); font-family: Montserrat, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;">
+    <div style="display:flex; align-items:center; gap: 12px;">
+      <div style="width: 40px; height: 40px; border-radius: 12px; background: rgba(204, 173, 121, 0.14); border: 1px solid rgba(204, 173, 121, 0.35); display:flex; align-items:center; justify-content:center; flex: 0 0 auto;">
+        <img src="favicon.png" alt="Selton" style="width: 22px; height: 22px; border-radius: 6px;" />
+      </div>
+      <div style="flex: 1 1 auto; min-width: 0;">
+        <div style="color: #FFFFFF; font-weight: 700; letter-spacing: 0.4px; font-size: 14px; line-height: 1.2;">Installer Selton Hotel</div>
+        <div style="color: rgba(255,255,255,0.72); font-size: 12px; line-height: 1.3; margin-top: 2px;">Accès rapide, plein écran, expérience améliorée.</div>
+      </div>
+      <button id="pwa-install-dismiss" type="button" aria-label="Fermer" style="background: transparent; border: none; color: rgba(255,255,255,0.7); padding: 8px 10px; font-size: 14px; cursor: pointer;">Plus tard</button>
+      <button id="pwa-install-button" type="button" style="background: #CCAD79; border: none; color: #1A2850; padding: 10px 14px; font-weight: 800; letter-spacing: 0.6px; border-radius: 12px; cursor: pointer;">INSTALLER</button>
+    </div>
+  </div>
+
+  <script src="flutter_bootstrap.js" async></script>
+
+  <script>
+    let deferredPrompt = null;
+    const banner = document.getElementById('pwa-install-banner');
+    const installBtn = document.getElementById('pwa-install-button');
+    const dismissBtn = document.getElementById('pwa-install-dismiss');
+
+    function hideBanner() {
+      if (!banner) return;
+      banner.style.display = 'none';
+    }
+
+    function showBanner() {
+      if (!banner) return;
+      banner.style.display = 'block';
+    }
+
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+
+      try {
+        const dismissed = window.localStorage.getItem('pwa_install_dismissed');
+        if (dismissed === '1') return;
+      } catch (_) {}
+
+      showBanner();
+    });
+
+    window.addEventListener('appinstalled', () => {
+      deferredPrompt = null;
+      hideBanner();
+      try { window.localStorage.setItem('pwa_install_dismissed', '1'); } catch (_) {}
+    });
+
+    if (dismissBtn) {
+      dismissBtn.addEventListener('click', () => {
+        hideBanner();
+        try { window.localStorage.setItem('pwa_install_dismissed', '1'); } catch (_) {}
+      });
+    }
+
+    if (installBtn) {
+      installBtn.addEventListener('click', async () => {
+        if (!deferredPrompt) return;
+        hideBanner();
+        deferredPrompt.prompt();
+        try {
+          await deferredPrompt.userChoice;
+        } finally {
+          deferredPrompt = null;
+        }
+      });
+    }
+  </script>
+</body>
+</html>

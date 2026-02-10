@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "875607847316",
+    "project_id": "selton-25f38",
+    "storage_bucket": "selton-25f38.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:875607847316:android:1a82dee29027b633dfdf81",
+        "android_client_info": {
+          "package_name": "com.selton.hotel"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD51_BB8hoC1N349DbY_FEUVW2XIT6myWA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

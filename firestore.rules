@@ -1,0 +1,12 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // ⚠️ RÈGLES TEMPORAIRES POUR INITIALISATION
+    // À remplacer par des règles strictes après avoir cliqué sur "Initialiser Database"
+    
+    match /{document=**} {
+      allow read, write: if true;
+    }
+  }
+}
